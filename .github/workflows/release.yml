@@ -1,0 +1,91 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+  id-token: write # <--- REQUIRED for OIDC
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Release
+      run: echo "running release"
+  
+  deploy-DEV:
+    needs: [Release]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: deploy
+      run: echo "running deploy DEV"
+  
+  deploy-QA:
+    needs: [Release]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: deploy
+      run: echo "running deploy QA"
+
+  
+  deploy-STAGE:
+    needs: [Release]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: deploy
+      run: echo "running deploy STAGE"
+  
+  deploy-PROD:
+    needs: [Release]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: deploy
+      run: echo "running deploy PROD"
+
+  
+
+    
+    

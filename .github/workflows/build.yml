@@ -1,0 +1,91 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+
+permissions:
+  contents: read
+  id-token: write # <--- REQUIRED for OIDC
+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Linting
+      run: echo "running linting.."
+  
+  build:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Build
+      run: echo "running build"
+  
+  publish:
+    needs: [build]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Publish
+      run: echo "running publish"
+  
+  deploy-DEV:
+    needs: [publish]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: deploy
+      run: echo "running deploy DEV"
+  
+  deploy-QA:
+    needs: [publish]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: deploy
+      run: echo "running deploy QA"
+
+  
+
+    
+    
