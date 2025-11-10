@@ -68,9 +68,8 @@ jobs:
       - name: Checkout gitops repo
         uses: actions/checkout@v4
         with:
-          repository: "https://github.com/devopswithprashant/gitops-test.git"
+          repository: "devopswithprashant/gitops-test"
           token: ${{ secrets.GHEC_TOKEN_K8 }}
-          path: gitops
           ref: feat-1.1.0
           fetch-depth: 10
 
