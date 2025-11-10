@@ -16,49 +16,49 @@ concurrency:
 
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   steps:
+  #   # Checkout the repository to the GitHub Actions runner
+  #   - name: Checkout
+  #     uses: actions/checkout@v4
 
-    - name: Linting
-      run: echo "running linting.."
+  #   - name: Linting
+  #     run: echo "running linting.."
   
-  build:
-    needs: [lint]
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+  # build:
+  #   needs: [lint]
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   steps:
+  #   # Checkout the repository to the GitHub Actions runner
+  #   - name: Checkout
+  #     uses: actions/checkout@v4
 
-    - name: Build
-      run: echo "running build"
+  #   - name: Build
+  #     run: echo "running build"
   
-  publish:
-    needs: [build]
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+  # publish:
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   steps:
+  #   # Checkout the repository to the GitHub Actions runner
+  #   - name: Checkout
+  #     uses: actions/checkout@v4
 
-    - name: Publish
-      run: echo "running publish"
+  #   - name: Publish
+  #     run: echo "running publish"
   
   deploy-DEV:
-    needs: [publish]
+    #needs: [publish]
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -80,7 +80,7 @@ jobs:
           yq --version
 
       - name: Update image tag in target file
-        working-directory: gitops
+        #working-directory: gitops
         id: update
         run: |
           set -euo pipefail
