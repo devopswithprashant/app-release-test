@@ -15,6 +15,11 @@ concurrency:
   cancel-in-progress: false
 
 
+env:
+  GIT_USER_NAME: "ci-bot"
+  GIT_USER_EMAIL: "ci-bot@example.com"
+
+
 jobs:
   # lint:
   #   runs-on: ubuntu-latest
@@ -85,7 +90,7 @@ jobs:
         run: |
           set -euo pipefail
           FILE="apps/blog/dev/deploy.yaml"
-          IMAGE="850756192530.dkr.ecr.us-east-1.amazonaws.com/devopswithprashant/testing:v2.1.0"
+          IMAGE="850756192530.dkr.ecr.us-east-1.amazonaws.com/devopswithprashant/testing:v5.1.0"
           echo "Updating file: $FILE -> image: $IMAGE"
 
           if [ ! -f "$FILE" ]; then
