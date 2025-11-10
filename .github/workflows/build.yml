@@ -78,11 +78,11 @@ jobs:
           ref: feat-1.1.0
           fetch-depth: 10
 
-      - name: Install yq (mikefarah)
-        run: |
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
-          yq --version
+      # - name: Install yq (mikefarah)
+      #   run: |
+      #     sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+      #     sudo chmod +x /usr/local/bin/yq
+      #     yq --version
 
       - name: Update image tag in target file
         #working-directory: gitops
@@ -90,28 +90,23 @@ jobs:
         run: |
           set -euo pipefail
           FILE="apps/blog/dev/deploy.yaml"
-          IMAGE="850756192530.dkr.ecr.us-east-1.amazonaws.com/devopswithprashant/testing:v5.1.0"
-          echo "Updating file: $FILE -> image: $IMAGE"
+          IMAGE="850756192530.dkr.ecr.us-east-1.amazonaws.com/devopswithprashant/testing"
+          NEW_TAG=v5.1.0
+          
 
           if [ ! -f "$FILE" ]; then
             echo "ERROR: target file not found: $FILE"
             exit 1
           fi
 
-          # Basic yq expression: replace container[0].image — adjust path if your manifest differs
-          # This will update the first container's image in the Deployment manifest.
-          # yq eval -i '.spec.template.spec.containers[0].image = env(IMAGE)' "$FILE"
-          yq eval -i '.spec.template.spec.containers[0].image = $IMAGE' "$FILE"
-
-          # show diff for visibility
-          # git --no-pager diff -- "$FILE" || true
+          sed -i -E "s|(image:\s*850756192530\.dkr\.ecr\.us-east-1\.amazonaws\.com/devopswithprashant/testing:)[^[:space:]]+|\1${NEW_TAG}|" "$FILE"
 
           # Git config
           git config user.name "${GIT_USER_NAME}"
           git config user.email "${GIT_USER_EMAIL}"
 
           git add "$FILE"
-          git commit -m "chore(DEV): bump blog image to ${IMAGE}"
+          git commit -m "chore(DEV): bump blog image to ${IMAGE} version ${NEW_TAG}"
           git push origin feat-1.1.0
 
           # Commit branch name and message (include machine-readable token)
