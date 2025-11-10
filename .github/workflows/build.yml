@@ -99,14 +99,14 @@ jobs:
           yq eval -i '.spec.template.spec.containers[0].image = $IMAGE' "$FILE"
 
           # show diff for visibility
-          git --no-pager diff -- "$FILE" || true
+          # git --no-pager diff -- "$FILE" || true
 
           # Git config
           git config user.name "${GIT_USER_NAME}"
           git config user.email "${GIT_USER_EMAIL}"
 
           git add "$FILE"
-          git commit -m "chore(DEV): bump blog image to ${IMAGE}
+          git commit -m "chore(DEV): bump blog image to ${IMAGE}"
           git push origin feat-1.1.0
 
           # Commit branch name and message (include machine-readable token)
