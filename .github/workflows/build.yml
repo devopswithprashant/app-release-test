@@ -95,7 +95,8 @@ jobs:
 
           # Basic yq expression: replace container[0].image — adjust path if your manifest differs
           # This will update the first container's image in the Deployment manifest.
-          yq eval -i '.spec.template.spec.containers[0].image = env(IMAGE)' "$FILE"
+          # yq eval -i '.spec.template.spec.containers[0].image = env(IMAGE)' "$FILE"
+          yq eval -i '.spec.template.spec.containers[0].image = $IMAGE' "$FILE"
 
           # show diff for visibility
           git --no-pager diff -- "$FILE" || true
