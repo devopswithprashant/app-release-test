@@ -36,56 +36,146 @@ jobs:
         shell: bash
     steps:
     # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout gitops repo
+        uses: actions/checkout@v4
+        with:
+          repository: "devopswithprashant/gitops-test"
+          token: ${{ secrets.GHEC_TOKEN_K8 }}
+          ref: feat-1.1.0
+          fetch-depth: 10
 
-    - name: deploy
-      run: echo "running deploy DEV"
+      - name: Update image tag in target file
+        #working-directory: gitops
+        id: update
+        run: |
+          set -euo pipefail
+          FILE="apps/blog/dev/deploy.yaml"
+          IMAGE="850756192530.dkr.ecr.us-east-1.amazonaws.com/devopswithprashant/testing"
+          NEW_TAG=v10.1.0
+          if [ ! -f "$FILE" ]; then
+            echo "ERROR target file not found: $FILE"
+            exit 1
+          fi
+          sed -i -E "s|(image:\s*850756192530\.dkr\.ecr\.us-east-1\.amazonaws\.com/devopswithprashant/testing:)[^[:space:]]+|\1${NEW_TAG}|" "$FILE"
+          # Git config
+          git config user.name "${GIT_USER_NAME}"
+          git config user.email "${GIT_USER_EMAIL}"
+          git add "$FILE"
+          git commit -m "chore(DEV): bump blog image to ${IMAGE} version ${NEW_TAG}"
+          git push origin feat-1.1.0
+
+      
   
   deploy-QA:
-    needs: [Release]
+    needs: [deploy-DEV]
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
     steps:
     # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout gitops repo
+        uses: actions/checkout@v4
+        with:
+          repository: "devopswithprashant/gitops-test"
+          token: ${{ secrets.GHEC_TOKEN_K8 }}
+          ref: feat-1.1.0
+          fetch-depth: 10
 
-    - name: deploy
-      run: echo "running deploy QA"
+      - name: Update image tag in target file
+        #working-directory: gitops
+        id: update
+        run: |
+          set -euo pipefail
+          FILE="apps/blog/qa/deploy.yaml"
+          IMAGE="850756192530.dkr.ecr.us-east-1.amazonaws.com/devopswithprashant/testing"
+          NEW_TAG=v17.1.0
+          if [ ! -f "$FILE" ]; then
+            echo "ERROR target file not found: $FILE"
+            exit 1
+          fi
+          sed -i -E "s|(image:\s*850756192530\.dkr\.ecr\.us-east-1\.amazonaws\.com/devopswithprashant/testing:)[^[:space:]]+|\1${NEW_TAG}|" "$FILE"
+          # Git config
+          git config user.name "${GIT_USER_NAME}"
+          git config user.email "${GIT_USER_EMAIL}"
+          git add "$FILE"
+          git commit -m "chore(DEV): bump blog image to ${IMAGE} version ${NEW_TAG}"
+          git push origin feat-1.1.0
 
   
   deploy-STAGE:
-    needs: [Release]
+    needs: [deploy-QA]
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
     steps:
     # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout gitops repo
+        uses: actions/checkout@v4
+        with:
+          repository: "devopswithprashant/gitops-test"
+          token: ${{ secrets.GHEC_TOKEN_K8 }}
+          ref: feat-1.1.0
+          fetch-depth: 10
 
-    - name: deploy
-      run: echo "running deploy STAGE"
+      - name: Update image tag in target file
+        #working-directory: gitops
+        id: update
+        run: |
+          set -euo pipefail
+          FILE="apps/blog/stage/deploy.yaml"
+          IMAGE="850756192530.dkr.ecr.us-east-1.amazonaws.com/devopswithprashant/testing"
+          NEW_TAG=v17.1.0
+          if [ ! -f "$FILE" ]; then
+            echo "ERROR target file not found: $FILE"
+            exit 1
+          fi
+          sed -i -E "s|(image:\s*850756192530\.dkr\.ecr\.us-east-1\.amazonaws\.com/devopswithprashant/testing:)[^[:space:]]+|\1${NEW_TAG}|" "$FILE"
+          # Git config
+          git config user.name "${GIT_USER_NAME}"
+          git config user.email "${GIT_USER_EMAIL}"
+          git add "$FILE"
+          git commit -m "chore(DEV): bump blog image to ${IMAGE} version ${NEW_TAG}"
+          git push origin feat-1.1.0
+
+      
   
   deploy-PROD:
-    needs: [Release]
+    needs: [deploy-STAGE]
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
     steps:
     # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout gitops repo
+        uses: actions/checkout@v4
+        with:
+          repository: "devopswithprashant/gitops-test"
+          token: ${{ secrets.GHEC_TOKEN_K8 }}
+          ref: feat-1.1.0
+          fetch-depth: 10
 
-    - name: deploy
-      run: echo "running deploy PROD"
+      - name: Update image tag in target file
+        #working-directory: gitops
+        id: update
+        run: |
+          set -euo pipefail
+          FILE="apps/blog/prod/deploy.yaml"
+          IMAGE="850756192530.dkr.ecr.us-east-1.amazonaws.com/devopswithprashant/testing"
+          NEW_TAG=v17.1.0
+          if [ ! -f "$FILE" ]; then
+            echo "ERROR target file not found: $FILE"
+            exit 1
+          fi
+          sed -i -E "s|(image:\s*850756192530\.dkr\.ecr\.us-east-1\.amazonaws\.com/devopswithprashant/testing:)[^[:space:]]+|\1${NEW_TAG}|" "$FILE"
+          # Git config
+          git config user.name "${GIT_USER_NAME}"
+          git config user.email "${GIT_USER_EMAIL}"
+          git add "$FILE"
+          git commit -m "chore(DEV): bump blog image to ${IMAGE} version ${NEW_TAG}"
+          git push origin feat-1.1.0
 
   
 
-    
-    
