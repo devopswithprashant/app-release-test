@@ -94,7 +94,16 @@ jobs:
           # Git config
           git config user.name "${GIT_USER_NAME}"
           git config user.email "${GIT_USER_EMAIL}"
+          # Check if file actually changed before committing
+          if git diff --quiet -- "$FILE"; then
+            echo "✅ No changes detected in $FILE — skipping commit & push."
+            exit 0
+          fi
           git add "$FILE"
+          if git diff --cached --quiet; then
+            echo "✅ Nothing new to commit — skipping push."
+            exit 0
+          fi
           git commit -m "chore(DEV): bump blog image to ${IMAGE} version ${NEW_TAG}"
           git push origin feat-1.1.0
 
@@ -132,8 +141,17 @@ jobs:
           # Git config
           git config user.name "${GIT_USER_NAME}"
           git config user.email "${GIT_USER_EMAIL}"
+          # Check if file actually changed before committing
+          if git diff --quiet -- "$FILE"; then
+            echo "✅ No changes detected in $FILE — skipping commit & push."
+            exit 0
+          fi
           git add "$FILE"
-          git commit -m "chore(DEV): bump blog image to ${IMAGE} version ${NEW_TAG}"
+          if git diff --cached --quiet; then
+            echo "✅ Nothing new to commit — skipping push."
+            exit 0
+          fi
+          git commit -m "chore(QA): bump blog image to ${IMAGE} version ${NEW_TAG}"
           git push origin feat-1.1.0
 
   
